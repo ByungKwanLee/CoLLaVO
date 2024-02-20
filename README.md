@@ -22,12 +22,12 @@ The remarkable success of Large Language Models (LLMs) and instruction tuning dr
 
 <img src="figures/fig_close.png" width="511" height="350">
 <figcaption>
-Figure. Zero-shot performance of <img src="figures/crayon_emoji.png" style="vertical-align: -5px;" :height="20px" width="20px"> CoLLaVO-7B on challenging VL datasets compared with closed-source VLMs: GPT-4V, Gemini-Pro, Qwen-VL-Plus. Note: The scores of MME are rescaled by 1/20 to match the scales with the accuracies of others.
+Figure. Zero-shot performance of CoLLaVO-7B on challenging VL datasets compared with closed-source VLMs: GPT-4V, Gemini-Pro, Qwen-VL-Plus. Note: The scores of MME are rescaled by 1/20 to match the scales with the accuracies of others.
 </figcaption>
 
 <img src="figures/fig_seed.png" width="532" height="350">
 <figcaption>
-Figure. Demonstrating the efficiency and effectiveness of <img src="figures/crayon_emoji.png" style="vertical-align: -5px;" :height="20px" width="20px"> CoLLaVO compared with those of other VLMs. Note that accuracy is measured on SEED-IMG.
+Figure. Demonstrating the efficiency and effectiveness of CoLLaVO compared with those of other VLMs. Note that accuracy is measured on SEED-IMG.
 </figcaption>
 
 
