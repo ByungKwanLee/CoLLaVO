@@ -1,18 +1,21 @@
 # <img src="figures/crayon_emoji.png" style="vertical-align: -10px;" :height="50px" width="50px"> ***CoLLaVO: Crayon Large Language and Vision mOdel*** [[arxiv]](https://arxiv.org/abs/2402.11248)
 
+### 🎨 In-Progress
+- [ ] Code will be made public.
+- [ ] Downloading CoLLaVO-7B will be available.
 
+---
 
-This is pytorch implementation code for realizing the technical part of *Crayon Large Language and Vision mOdel (CoLLaVO)* to improve performance of numerous zero-shot vision language tasks.
+Official PyTorch implementation code for realizing the technical part of *Crayon Large Language and Vision mOdel (CoLLaVO)* to improve performance of numerous zero-shot vision language tasks.
 This code is developed on two baseline codes of [XDecoder: Generalized Decoding for Pixel, Image, and Language](https://github.com/microsoft/X-Decoder) accepted in [CVPR 2023](https://openaccess.thecvf.com/content/CVPR2023/papers/Zou_Generalized_Decoding_for_Pixel_Image_and_Language_CVPR_2023_paper.pdf)
 and [InternLM](https://github.com/InternLM/InternLM) for [Technical Paper](https://github.com/InternLM/InternLM-techreport/blob/main/InternLM.pdf). Later, I will make the code simplified further from the scratch (planned in mid March). Please understand the dirty code in the current version combining two technical code implementation, which brings in too many redundant lines! Stay tuned!
 
 
-[x]   Implemented with **Accelerate (DeepSpeed, FSDP, DDP), PEFT, Transformers, BitsandBytes** in Huggingface.
+- [x] Implemented with **Accelerate (DeepSpeed, FSDP, DDP), PEFT, Transformers, BitsandBytes** in Huggingface.
 
-[x]   Trained on 4bit QLORA.
+- [x] Trained on 4bit QLORA.
 
-[x] Supporting multi-node training with multiple server machines thanks to Accelerate.
-
+- [x] Supporting multi-node training with multiple server machines thanks to Accelerate.
 
 ## 🏝️ Summary
 
