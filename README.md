@@ -1,7 +1,7 @@
 # <img src="figures/crayon_emoji.png" style="vertical-align: -10px;" :height="50px" width="50px"> ***CoLLaVO: Crayon Large Language and Vision mOdel*** [[arxiv]](https://arxiv.org/abs/2402.11248)
 
 ### 🎨 In-Progress
-- [ ] Code will be made public.
+- [x] Code will be made public.
 - [ ] Downloading CoLLaVO-7B will be available.
 
 ---
@@ -9,13 +9,6 @@
 Official PyTorch implementation code for realizing the technical part of *Crayon Large Language and Vision mOdel (CoLLaVO)* to improve performance of numerous zero-shot vision language tasks.
 This code is developed on two baseline codes of [XDecoder: Generalized Decoding for Pixel, Image, and Language](https://github.com/microsoft/X-Decoder) accepted in [CVPR 2023](https://openaccess.thecvf.com/content/CVPR2023/papers/Zou_Generalized_Decoding_for_Pixel_Image_and_Language_CVPR_2023_paper.pdf)
 and [InternLM](https://github.com/InternLM/InternLM) for [Technical Paper](https://github.com/InternLM/InternLM-techreport/blob/main/InternLM.pdf). Later, I will make the code simplified further from the scratch (planned in mid March). Please understand the dirty code in the current version combining two technical code implementation, which brings in too many redundant lines! Stay tuned!
-
-
-- [x] Implemented with **Accelerate (DeepSpeed, FSDP, DDP), PEFT, Transformers, BitsandBytes** in Huggingface.
-
-- [x] Trained on 4bit QLORA.
-
-- [x] Supporting multi-node training with multiple server machines thanks to Accelerate.
 
 ## 🏝️ Summary
 
@@ -79,15 +72,13 @@ Table. Measuring four metrics: Accuracy, Precision, Recall, F1-score on three ty
     │   └── registration                # register dataset
     │
     ├── configs                         
-    │   ├── accel                       # Accelerate Config files (Support Deepspeed, DDP, Multinode)
-    │   ├── collavo_step1.yaml          # STEP1 config file (Not Support Now)
-    │   ├── collavo_step2.yaml          # STEP2 config file (Support Inference Only, Important)
-    │   └── vl_test.yaml                # Evaluating other vision language models (Not Support Now)
+    │   ├── accel                       # Accelerate Config files (Support DDP)
+    │   └── collavo_eval.yaml           # Config of evaluating collavo
     │
     ├── modeling                        # Not Important
     │   ├── architectures               # training the prototype of collavo (Not Support Now)
     │   ├── utils                       # utils for modeling (Not important)
-    │   └── BaseModel                   # loading and saving model (Important)
+    │   └── BaseModel                   # loading and saving model
     │
     ├── lbk_entry.py                    # main code of control tower (Important)
     ├── run                             # bash file for running the evaluation (Important)
@@ -178,18 +169,18 @@ Note that, you should change the two parts to evaluate the dataset you want. (**
 
 > PIPELINE
 
-* GQA: `CoLLaVOGQAPipeline`
-* SQA-IMG: `CoLLaVOSQAPipeline`
-* TextVQA: `CoLLaVOTextVQAPipeline`
-* POPE: `CoLLaVOPOPEPipeline`
-* MME: `CoLLaVOMMEPipeline`
-* MM-Bench: `CoLLaVOMMBenchPipeline`
-* MM-Vet: `CoLLaVOMMVetPipeline`
-* Q-Bench: `CoLLaVOQBenchPipeline`
-* MATHVISTA: `CoLLaVOMathVistaPipeline`
-* AI2D: `CoLLaVOAI2DPipeline`
-* SEED-IMG: `CoLLaVOSEEDPipeline`
-* HallusionBench: `CoLLaVOHallusionPipeline`
+* GQA: `GQAPipeline`
+* SQA-IMG: `SQAPipeline`
+* TextVQA: `TextVQAPipeline`
+* POPE: `POPEPipeline`
+* MME: `MMEPipeline`
+* MM-Bench: `MMBenchPipeline`
+* MM-Vet: `MMVetPipeline`
+* Q-Bench: `QBenchPipeline`
+* MATHVISTA: `MathVistaPipeline`
+* AI2D: `AI2DPipeline`
+* SEED-IMG: `SEEDPipeline`
+* HallusionBench: `HallusionPipeline`
 
 > GPT-4 Aid Evalution for AI2D, MM-Vet, SEED-IMG
 
