@@ -34,9 +34,8 @@ class CoLLaVO(nn.Module):
 
         # CoLLaVO
         if cfg['LLM']['LOAD_LLM']:
-            collavo_model, collavo_processor, seg_model, seg_processor = prepare_collavo(bits=cfg['LLM']['BITS'],
-                                                                                        grad_ckpt=cfg['LLM']['GRAD_CKPT'],
-                                                                                        lora=cfg['LLM']['LORA'],
+            collavo_model, collavo_processor, seg_model, seg_processor = prepare_collavo(collavo_path="BK-LEE/CoLLaVO-7B",
+                                                                                         bits=cfg['LLM']['BITS'],
                                                                                         dtype=cfg['LLM']['DTYPE'])
         else:
             collavo_model, collavo_processor = None, None

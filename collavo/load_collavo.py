@@ -17,7 +17,7 @@ def find_all_linear_names(model):
     output_lora_module_names.remove("Plora_seg_B")
     return output_lora_module_names
 
-def prepare_collavo(bits, dtype):
+def prepare_collavo(collavo_path, bits, dtype):
 
     # Mask2Former-Panoptic
     from transformers import AutoImageProcessor, Mask2FormerForUniversalSegmentation
@@ -48,7 +48,7 @@ def prepare_collavo(bits, dtype):
         ))
 
     # CoLLaVOModel Loading
-    collavo_model = CoLLaVOModel.from_pretrained("BK-Lee/CoLLaVO-7B", **bnb_model_from_pretrained_args)
+    collavo_model = CoLLaVOModel.from_pretrained(collavo_path, **bnb_model_from_pretrained_args)
     collavo_model.model.config.use_cache = False
 
     # bfloat16/float16 conversion 
@@ -57,7 +57,7 @@ def prepare_collavo(bits, dtype):
             param.data = param.data.to(torch.bfloat16 if dtype=='bf16' else torch.float16)
     
     # Post-Processing for <image> Token
-    collavo_processor = CoLLaVOTokenizer.from_pretrained("BK-Lee/CoLLaVO-7B", padding_side='left')
+    collavo_processor = CoLLaVOTokenizer.from_pretrained(collavo_path, padding_side='left')
     collavo_processor.add_tokens("<image>", special_tokens=True)
     collavo_model.resize_token_embeddings(len(collavo_processor))
     collavo_model.config.image_token_index = collavo_processor("<image>", add_special_tokens=False, return_tensors='pt').input_ids.item()

@@ -211,6 +211,9 @@ class CoLLaVOModel(InternLM2PreTrainedModel):
         # RGB Dimension
         image = image[:3]
 
+        # Device Allocation
+        seg_model = seg_model.to(device)
+
         # Mask2former Inputs
         seg_inputs = seg_processor(images=[image], return_tensors="pt")
 

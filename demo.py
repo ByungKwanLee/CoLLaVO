@@ -12,7 +12,7 @@ image_path = "figures/crayon_image.jpg"
 image = Resize(size=(490, 490), antialias=False)(pil_to_tensor(Image.open(image_path)))
 
 # [2] Instruction Prompt
-prompt = "Describe this image in detail."
+prompt = "Describe this image in detail"
 
 # [3] Loading CoLLaVO
 from collavo.load_collavo import prepare_collavo

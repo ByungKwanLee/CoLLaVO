@@ -1,14 +1,25 @@
 # <img src="figures/crayon_emoji.png" style="vertical-align: -10px;" :height="50px" width="50px"> ***CoLLaVO: Crayon Large Language and Vision mOdel*** [[arxiv]](https://arxiv.org/abs/2402.11248)
 
+### 📰 News
+- CoLLaVO is now available in 🤗[Huggingface Space](https://huggingface.co/BK-Lee/CoLLaVO-7B).
+- CoLLaVO is featured by [Huggingface Daily Papers](https://huggingface.co/papers?date=2024-02-20).
+- A new model, MoAI is either released in [[Paper](https://arxiv.org/abs/2403.07508)]/[[Github](https://github.com/ByungKwanLee/MoAI)]/[[Huggingface](https://huggingface.co/BK-Lee/MoAI-7B)].
+
+![crayon_demo](https://github.com/ByungKwanLee/CoLLaVO/assets/50401429/34d2cd62-0698-4c4e-a0b7-b04cc24ac080)
+
+
 ### 🎨 In-Progress
-- [x] Code will be made public.
-- [ ] Downloading CoLLaVO-7B will be available.
+- [x] Code is public (Only Inference Supported).
+- [x] Downloading CoLLaVO-7B is available in Huggingface.
+- [x] Huggingface README.md for simple running
+- [x] Short running code for an image example is available.
+- [ ] Uploading GPT-Aided Evaluation
 
 ---
 
 Official PyTorch implementation code for realizing the technical part of *Crayon Large Language and Vision mOdel (CoLLaVO)* to improve performance of numerous zero-shot vision language tasks.
 This code is developed on two baseline codes of [XDecoder: Generalized Decoding for Pixel, Image, and Language](https://github.com/microsoft/X-Decoder) accepted in [CVPR 2023](https://openaccess.thecvf.com/content/CVPR2023/papers/Zou_Generalized_Decoding_for_Pixel_Image_and_Language_CVPR_2023_paper.pdf)
-and [InternLM](https://github.com/InternLM/InternLM) for [Technical Paper](https://github.com/InternLM/InternLM-techreport/blob/main/InternLM.pdf). Later, I will make the code simplified further from the scratch (planned in mid March). Please understand the dirty code in the current version combining two technical code implementation, which brings in too many redundant lines! Stay tuned!
+and [InternLM](https://github.com/InternLM/InternLM) for [Technical Paper](https://github.com/InternLM/InternLM-techreport/blob/main/InternLM.pdf).
 
 ## 🏝️ Summary
 
@@ -55,7 +66,7 @@ Table. Measuring four metrics: Accuracy, Precision, Recall, F1-score on three ty
 | [InstructBLIP-7B](https://huggingface.co/docs/transformers/model_doc/instructblip) |   49.5   |   49.2   |   60.5   |   50.1   |      -     |     -     |   36.0   |   23.7   |   25.6   |   56.7   |
 | [Qwen-VL-Chat-7B](https://github.com/QwenLM/Qwen-VL) |   57.5   |   68.2   |   61.5   |     -    |   1487.5   |   360.7   |   60.6   |   56.7   |     -    |     -    |
 | [LLaVA1.5-7B](https://huggingface.co/docs/transformers/model_doc/llava)     | **62.0** |   66.8   |   58.2   |   85.9   |   1510.7   |   293.8   |   64.3   |   58.3   |   30.5   |   58.7   |
-| [CoLLaVO-7B](https://sites.google.com/view/deepvisionresearcher)      |   61.4   | **80.7** | **64.2** | **87.2** | **1689.7** | **525.0** | **83.0** | **82.1** | **40.3** | **67.6** |
+| [CoLLaVO-7B](https://huggingface.co/BK-Lee/CoLLaVO-7B/tree/main)      |   61.4   | **80.7** | **64.2** | **87.2** | **1689.7** | **525.0** | **83.0** | **82.1** | **40.3** | **67.6** |
 
 
 ## 📂 Directory Layout
@@ -112,41 +123,82 @@ export DATASET2=/path/to/dataset
 export VLDATASET=/path/to/dataset
 ```
 
-> Download CoLLaVO Model and then,
+> Download CoLLaVO-7B Model and then you can run the demo.py
+
+```python
+"""
+CoLLaVO-7B
+
+Simple Six Steps
+"""
+
+# [1] Loading Image
+from PIL import Image
+from torchvision.transforms import Resize
+from torchvision.transforms.functional import pil_to_tensor
+image_path = "figures/crayon_image.jpg"
+image = Resize(size=(490, 490), antialias=False)(pil_to_tensor(Image.open(image_path)))
+
+# [2] Instruction Prompt
+prompt = "Describe this image in detail"
+
+# [3] Loading CoLLaVO
+from collavo.load_collavo import prepare_collavo
+collavo_model, collavo_processor, seg_model, seg_processor = prepare_collavo(collavo_path='BK-Lee/CoLLaVO-7B', bits=4, dtype='fp16')
+
+# [4] Pre-processing for CoLLaVO
+collavo_inputs = collavo_model.demo_process(image=image, 
+                                    prompt=prompt, 
+                                    processor=collavo_processor,
+                                    seg_model=seg_model,
+                                    seg_processor=seg_processor,
+                                    device='cuda:0')
+
+# [5] Generate
+import torch
+with torch.inference_mode():
+    generate_ids = collavo_model.generate(**collavo_inputs, do_sample=True, temperature=0.9, top_p=0.95, max_new_tokens=256, use_cache=True)
+
+# [6] Decoding
+answer = collavo_processor.batch_decode(generate_ids, skip_special_tokens=True)[0].split('[U')[0]
+print(answer)
+```
+
+
+> If you want to valiate zero-shot performances in numerous datasets, then running the bash file 'run'.
 
 
 ```shell bash
-GPU_DEVICE="0,1,2,3"
+# CoLLaVO-Experiment
+GPU_DEVICE="0,1,2,3,4,5"
 length=${#GPU_DEVICE}
 n_gpu=$(((length+1)/2))
 main_port=10000
-test_batch=5
+test_batch=1
 
-# CoLLaVOPipeline
 CUDA_VISIBLE_DEVICES=$GPU_DEVICE \
-            accelerate launch --config_file configs/accel/ddp_accel.yaml \
-            --num_processes=$n_gpu \
-            --main_process_port=$main_port \
-            lbk_entry.py eval \
-            --conf_files configs/collavo_step2.yaml \
-            --overrides \
-            WANDB False \
-            DATASETS.TEST pope_test\
-            PIPELINE CoLLaVOPOPEPipeline \
-            GQA.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            SCIENCEQA.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            TEXTVQA.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            POPE.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            MME.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            MMBENCH.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            MMVET.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            QBENCH.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            MATHVISTA.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            AI2D.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            SEED.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            HALLUSIONBENCH.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
-            WEIGHT True \
-            RESUME_FROM /path/to/CoLLaVO \
+accelerate launch --config_file configs/accel/ddp_accel.yaml \
+    --num_processes=$n_gpu \
+    --main_process_port=$main_port \
+    lbk_entry.py eval \
+    --conf_files configs/collavo_eval.yaml \
+    --overrides \
+    WANDB False \
+    DATASETS.TEST mme \
+    PIPELINE MMEPipeline \
+    MME.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
+    SCIENCEQA.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
+    POPE.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
+    MMBENCH.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
+    MMVET.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
+    AI2D.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
+    HALLUSIONBENCH.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
+    MATHVISTA.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
+    QBENCH.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
+    SEED.TEST.BATCH_SIZE_TOTAL $((n_gpu * test_batch)) \
+    SAVE_DIR /path/to/CoLLaVO_DIR \
+    WEIGHT True \
+    RESUME_FROM /path/to/CoLLaVO_WEIGHT \
 ```
 
 Note that, you should change the two parts to evaluate the dataset you want. (**This is very important!!**)

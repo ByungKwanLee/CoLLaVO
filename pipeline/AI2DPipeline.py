@@ -117,10 +117,6 @@ class AI2DPipeline:
                                                                     processor=model.collavo_processor,
                                                                     seg_model=model.seg_model,
                                                                     seg_processor=model.seg_processor,
-                                                                    od_model=model.od_model,
-                                                                    od_processor=model.od_processor,
-                                                                    sgg_model=model.sgg_model,
-                                                                    ocr_model=model.ocr_model,
                                                                     device=trainer.accel.device)
                 
                 # Batch Generate

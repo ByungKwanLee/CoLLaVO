@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from detectron2.structures import BitMasks
-from utils.constants import COCO_PANOPTIC_CLASSES, PREDICATES, ADE20K_847, IMAGENET_CLASSES
+from utils.constants import COCO_PANOPTIC_CLASSES
 
 def make_system_prompt(processor, device, ignore_index, img_length=1225):
     # system prompt
