@@ -8,7 +8,7 @@ import numpy as np
 
 from detectron2.evaluation.evaluator import DatasetEvaluator
 from collections import defaultdict
-from moai.eval.m4c_evaluator import mme_calculate_metrics
+from collavo.eval.m4c_evaluator import mme_calculate_metrics
 
 _root = os.getenv("DATASET2", "datasets")
 

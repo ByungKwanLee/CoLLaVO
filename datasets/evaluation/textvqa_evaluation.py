@@ -7,7 +7,7 @@ import itertools
 import detectron2.utils.comm as comm
 from detectron2.evaluation.evaluator import DatasetEvaluator
 
-from moai.eval.m4c_evaluator import TextVQAAccuracyEvaluator
+from collavo.eval.m4c_evaluator import TextVQAAccuracyEvaluator
 
 _root = os.getenv("DATASET2", "datasets")
 
