@@ -6,7 +6,7 @@ from utils.arguments import load_opt_command
 def main(args=None):
     opt, cmdline_args = load_opt_command(args)
 
-    from trainer import MoAI_Trainer as Trainer
+    from trainer import CoLLaVO_Trainer as Trainer
     trainer = Trainer(opt)
     
     if cmdline_args.command == 'train':

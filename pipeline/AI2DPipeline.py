@@ -11,7 +11,7 @@ from trainer.utils.misc import move_batch_to_device
 
 from .utils.misc import hook_opt
 import torch.distributed as dist
-from moai.utils.utils import *
+from collavo.utils.utils import *
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +103,7 @@ class AI2DPipeline:
                 # Visualization
                 # a = batch[0]['image'].permute(1,2,0).cpu().numpy()
 
-                # MoAI: llm preparation
+                # CoLLaVO: llm preparation
                 choices = []
                 for x in batch:
                     options = ""
@@ -111,27 +111,26 @@ class AI2DPipeline:
                         options += f"{choice} {ans}\n"
                     choices.append(options)
                     
-                # MoAI: llm preparation
-                moai_inputs = model.moai_model.eval_process(images=torch.stack([x['image'] for x in batch]), 
+                # CoLLaVO: llm preparation
+                collavo_inputs = model.collavo_model.eval_process(images=torch.stack([x['image'] for x in batch]), 
                                                                     prompts=[f"{x['question']}\n{choice}\nAnswer with the option's letter from the given choices directly." for x, choice in zip(batch, choices)], 
-                                                                    processor=model.moai_processor,
+                                                                    processor=model.collavo_processor,
                                                                     seg_model=model.seg_model,
                                                                     seg_processor=model.seg_processor,
                                                                     od_model=model.od_model,
                                                                     od_processor=model.od_processor,
                                                                     sgg_model=model.sgg_model,
                                                                     ocr_model=model.ocr_model,
-                                                                    device=trainer.accel.device,
-                                                                    mode='moai_eval.yaml')
+                                                                    device=trainer.accel.device)
                 
                 # Batch Generate
                 with torch.inference_mode():
-                    generate_ids = model.moai_model.generate(**moai_inputs, do_sample=False, num_beams=3, max_new_tokens=128, use_cache=True)
+                    generate_ids = model.collavo_model.generate(**collavo_inputs, do_sample=False, num_beams=3, max_new_tokens=128, use_cache=True)
                 
                 # Batch Decoding
                 decoded_text = []
                 for gen_id in generate_ids:
-                    decoded_text.append(model.moai_processor.batch_decode(gen_id[gen_id!=-100].unsqueeze(0), skip_special_tokens=True, clean_up_tokenization_spaces=False)[0])
+                    decoded_text.append(model.collavo_processor.batch_decode(gen_id[gen_id!=-100].unsqueeze(0), skip_special_tokens=True, clean_up_tokenization_spaces=False)[0])
 
 
                 # Batch VQA evaluate process

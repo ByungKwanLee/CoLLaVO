@@ -13,4 +13,4 @@ class BaseModel(nn.Module):
         outputs = self.model(*inputs, **kwargs)
         return outputs
     
-    # for name, param in self.model.moai_model.named_parameters(): print(f"{name}: {param.dtype} {param.requires_grad}")
+    # for name, param in self.model.collavo_model.named_parameters(): print(f"{name}: {param.dtype} {param.requires_grad}")
