@@ -1,1 +1,1 @@
-from .moai_trainer import *
+from .collavo_trainer import *
