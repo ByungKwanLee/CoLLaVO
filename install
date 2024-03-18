@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+conda create -n collavo python=3.9
+conda activate collavo
+conda clean -a && pip cache purge
+conda install pytorch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 pytorch-cuda=11.8 -c pytorch -c nvidia
+pip install -r assets/requirements/requirements.txt
+pip install -r assets/requirements/requirements_custom.txt
+pip install flash-attn --no-build-isolation
+
+export DETECTRON2_DATASETS=/path/to/dataset
+export DATASET=/path/to/dataset
+export DATASET2=/path/to/dataset
+export VLDATASET=/path/to/dataset
