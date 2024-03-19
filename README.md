@@ -47,13 +47,11 @@ Table. Measuring four metrics: Accuracy, Precision, Recall, F1-score on three ty
 ## 📖 Citation
 
 ```
-@misc{lee2024collavo,
-      title={CoLLaVO: Crayon Large Language and Vision mOdel}, 
-      author={Byung-Kwan Lee and Beomchan Park and Chae Won Kim and Yong Man Ro},
-      year={2024},
-      eprint={2402.11248},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@article{lee2024moai,
+  title={MoAI: Mixture of All Intelligence for Large Language and Vision Models},
+  author={Lee, Byung-Kwan and Park, Beomchan and Kim, Chae Won and Ro, Yong Man},
+  journal={arXiv preprint arXiv:2403.07508},
+  year={2024}
 }
 ```
 
