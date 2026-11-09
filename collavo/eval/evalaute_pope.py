@@ -8,13 +8,13 @@ pope_results['adversarial'] = None
 pope_results['popular'] = None
 pope_results['random'] = None
 
-answers = json.load(open(answer_file, "r"))
+answers = json.load(open(answer_file, "r", encoding="utf-8"))
 predictions = {p["question_id"]: p for p in answers}
 pred_answers = [p for p in answers]
 
 def eval_pope(answers, label_file):
-    label_list = [json.loads(q)['label'] for q in open(label_file, 'r')]
-    label_list2 = [json.loads(q) for q in open(label_file, 'r')]
+    label_list = [json.loads(q)['label'] for q in open(label_file, 'r', encoding='utf-8')]
+    label_list2 = [json.loads(q) for q in open(label_file, 'r', encoding='utf-8')]
     for answer in answers:
         text = answer['answer'].lower()
 
